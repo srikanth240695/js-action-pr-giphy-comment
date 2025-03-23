@@ -33894,6 +33894,35 @@ const Giphy = __nccwpck_require__(1649);
 const core = __nccwpck_require__(2186);
 const github = __nccwpck_require__(5438);
 
+async function run() {
+    try {
+      const githubToken = core.getInput('github-token');
+      const giphyApiKey = core.getInput('giphy-api-key');
+  
+      const octokit = new Octokit({ auth: githubToken });
+      const giphy = new GiphyFetch(giphyApiKey);
+  
+      const context = github.context;
+      const { owner, repo, number } = context.issue;
+      const prComment = await giphy.random({ tag: 'thank you', rating: 'g' });
+  
+      await octokit.issues.createComment({
+        owner,
+        repo,
+        issue_number: number,
+        body: `### PR - ${number} \n ### Thank you for the contribution! \n ![Giphy](${prComment.data.images.downsized.url})`,
+      });
+  
+      core.setOutput('comment-url', `${prComment.data.images.downsized.url}`);
+      console.log(`Giphy GIF comment added successfully! Comment URL: ${prComment.data.images.downsized.url}`);
+    } catch (error) {
+      console.error('Error:', error);
+      Process.exit(1);
+    }
+  }
+  
+  run();
+
 })();
 
 module.exports = __webpack_exports__;
