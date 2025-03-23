@@ -2096,6 +2096,687 @@ class DecodedURL extends URL {
 
 /***/ }),
 
+/***/ 7193:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+Object.defineProperty(exports, "NIL", ({
+  enumerable: true,
+  get: function () {
+    return _nil.default;
+  }
+}));
+Object.defineProperty(exports, "parse", ({
+  enumerable: true,
+  get: function () {
+    return _parse.default;
+  }
+}));
+Object.defineProperty(exports, "stringify", ({
+  enumerable: true,
+  get: function () {
+    return _stringify.default;
+  }
+}));
+Object.defineProperty(exports, "v1", ({
+  enumerable: true,
+  get: function () {
+    return _v.default;
+  }
+}));
+Object.defineProperty(exports, "v3", ({
+  enumerable: true,
+  get: function () {
+    return _v2.default;
+  }
+}));
+Object.defineProperty(exports, "v4", ({
+  enumerable: true,
+  get: function () {
+    return _v3.default;
+  }
+}));
+Object.defineProperty(exports, "v5", ({
+  enumerable: true,
+  get: function () {
+    return _v4.default;
+  }
+}));
+Object.defineProperty(exports, "validate", ({
+  enumerable: true,
+  get: function () {
+    return _validate.default;
+  }
+}));
+Object.defineProperty(exports, "version", ({
+  enumerable: true,
+  get: function () {
+    return _version.default;
+  }
+}));
+
+var _v = _interopRequireDefault(__nccwpck_require__(600));
+
+var _v2 = _interopRequireDefault(__nccwpck_require__(3345));
+
+var _v3 = _interopRequireDefault(__nccwpck_require__(8659));
+
+var _v4 = _interopRequireDefault(__nccwpck_require__(9898));
+
+var _nil = _interopRequireDefault(__nccwpck_require__(6301));
+
+var _version = _interopRequireDefault(__nccwpck_require__(2841));
+
+var _validate = _interopRequireDefault(__nccwpck_require__(4343));
+
+var _stringify = _interopRequireDefault(__nccwpck_require__(9055));
+
+var _parse = _interopRequireDefault(__nccwpck_require__(1085));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/***/ }),
+
+/***/ 3989:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _crypto = _interopRequireDefault(__nccwpck_require__(6113));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function md5(bytes) {
+  if (Array.isArray(bytes)) {
+    bytes = Buffer.from(bytes);
+  } else if (typeof bytes === 'string') {
+    bytes = Buffer.from(bytes, 'utf8');
+  }
+
+  return _crypto.default.createHash('md5').update(bytes).digest();
+}
+
+var _default = md5;
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ 6733:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _crypto = _interopRequireDefault(__nccwpck_require__(6113));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _default = {
+  randomUUID: _crypto.default.randomUUID
+};
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ 6301:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+var _default = '00000000-0000-0000-0000-000000000000';
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ 1085:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _validate = _interopRequireDefault(__nccwpck_require__(4343));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function parse(uuid) {
+  if (!(0, _validate.default)(uuid)) {
+    throw TypeError('Invalid UUID');
+  }
+
+  let v;
+  const arr = new Uint8Array(16); // Parse ########-....-....-....-............
+
+  arr[0] = (v = parseInt(uuid.slice(0, 8), 16)) >>> 24;
+  arr[1] = v >>> 16 & 0xff;
+  arr[2] = v >>> 8 & 0xff;
+  arr[3] = v & 0xff; // Parse ........-####-....-....-............
+
+  arr[4] = (v = parseInt(uuid.slice(9, 13), 16)) >>> 8;
+  arr[5] = v & 0xff; // Parse ........-....-####-....-............
+
+  arr[6] = (v = parseInt(uuid.slice(14, 18), 16)) >>> 8;
+  arr[7] = v & 0xff; // Parse ........-....-....-####-............
+
+  arr[8] = (v = parseInt(uuid.slice(19, 23), 16)) >>> 8;
+  arr[9] = v & 0xff; // Parse ........-....-....-....-############
+  // (Use "/" to avoid 32-bit truncation when bit-shifting high-order bytes)
+
+  arr[10] = (v = parseInt(uuid.slice(24, 36), 16)) / 0x10000000000 & 0xff;
+  arr[11] = v / 0x100000000 & 0xff;
+  arr[12] = v >>> 24 & 0xff;
+  arr[13] = v >>> 16 & 0xff;
+  arr[14] = v >>> 8 & 0xff;
+  arr[15] = v & 0xff;
+  return arr;
+}
+
+var _default = parse;
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ 4677:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+var _default = /^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000)$/i;
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ 5636:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = rng;
+
+var _crypto = _interopRequireDefault(__nccwpck_require__(6113));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const rnds8Pool = new Uint8Array(256); // # of random values to pre-allocate
+
+let poolPtr = rnds8Pool.length;
+
+function rng() {
+  if (poolPtr > rnds8Pool.length - 16) {
+    _crypto.default.randomFillSync(rnds8Pool);
+
+    poolPtr = 0;
+  }
+
+  return rnds8Pool.slice(poolPtr, poolPtr += 16);
+}
+
+/***/ }),
+
+/***/ 6936:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _crypto = _interopRequireDefault(__nccwpck_require__(6113));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function sha1(bytes) {
+  if (Array.isArray(bytes)) {
+    bytes = Buffer.from(bytes);
+  } else if (typeof bytes === 'string') {
+    bytes = Buffer.from(bytes, 'utf8');
+  }
+
+  return _crypto.default.createHash('sha1').update(bytes).digest();
+}
+
+var _default = sha1;
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ 9055:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+exports.unsafeStringify = unsafeStringify;
+
+var _validate = _interopRequireDefault(__nccwpck_require__(4343));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Convert array of 16 byte values to UUID string format of the form:
+ * XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+ */
+const byteToHex = [];
+
+for (let i = 0; i < 256; ++i) {
+  byteToHex.push((i + 0x100).toString(16).slice(1));
+}
+
+function unsafeStringify(arr, offset = 0) {
+  // Note: Be careful editing this code!  It's been tuned for performance
+  // and works in ways you may not expect. See https://github.com/uuidjs/uuid/pull/434
+  return byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + '-' + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + '-' + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + '-' + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + '-' + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]];
+}
+
+function stringify(arr, offset = 0) {
+  const uuid = unsafeStringify(arr, offset); // Consistency check for valid UUID.  If this throws, it's likely due to one
+  // of the following:
+  // - One or more input array values don't map to a hex octet (leading to
+  // "undefined" in the uuid)
+  // - Invalid input values for the RFC `version` or `variant` fields
+
+  if (!(0, _validate.default)(uuid)) {
+    throw TypeError('Stringified UUID is invalid');
+  }
+
+  return uuid;
+}
+
+var _default = stringify;
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ 600:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _rng = _interopRequireDefault(__nccwpck_require__(5636));
+
+var _stringify = __nccwpck_require__(9055);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// **`v1()` - Generate time-based UUID**
+//
+// Inspired by https://github.com/LiosK/UUID.js
+// and http://docs.python.org/library/uuid.html
+let _nodeId;
+
+let _clockseq; // Previous uuid creation time
+
+
+let _lastMSecs = 0;
+let _lastNSecs = 0; // See https://github.com/uuidjs/uuid for API details
+
+function v1(options, buf, offset) {
+  let i = buf && offset || 0;
+  const b = buf || new Array(16);
+  options = options || {};
+  let node = options.node || _nodeId;
+  let clockseq = options.clockseq !== undefined ? options.clockseq : _clockseq; // node and clockseq need to be initialized to random values if they're not
+  // specified.  We do this lazily to minimize issues related to insufficient
+  // system entropy.  See #189
+
+  if (node == null || clockseq == null) {
+    const seedBytes = options.random || (options.rng || _rng.default)();
+
+    if (node == null) {
+      // Per 4.5, create and 48-bit node id, (47 random bits + multicast bit = 1)
+      node = _nodeId = [seedBytes[0] | 0x01, seedBytes[1], seedBytes[2], seedBytes[3], seedBytes[4], seedBytes[5]];
+    }
+
+    if (clockseq == null) {
+      // Per 4.2.2, randomize (14 bit) clockseq
+      clockseq = _clockseq = (seedBytes[6] << 8 | seedBytes[7]) & 0x3fff;
+    }
+  } // UUID timestamps are 100 nano-second units since the Gregorian epoch,
+  // (1582-10-15 00:00).  JSNumbers aren't precise enough for this, so
+  // time is handled internally as 'msecs' (integer milliseconds) and 'nsecs'
+  // (100-nanoseconds offset from msecs) since unix epoch, 1970-01-01 00:00.
+
+
+  let msecs = options.msecs !== undefined ? options.msecs : Date.now(); // Per 4.2.1.2, use count of uuid's generated during the current clock
+  // cycle to simulate higher resolution clock
+
+  let nsecs = options.nsecs !== undefined ? options.nsecs : _lastNSecs + 1; // Time since last uuid creation (in msecs)
+
+  const dt = msecs - _lastMSecs + (nsecs - _lastNSecs) / 10000; // Per 4.2.1.2, Bump clockseq on clock regression
+
+  if (dt < 0 && options.clockseq === undefined) {
+    clockseq = clockseq + 1 & 0x3fff;
+  } // Reset nsecs if clock regresses (new clockseq) or we've moved onto a new
+  // time interval
+
+
+  if ((dt < 0 || msecs > _lastMSecs) && options.nsecs === undefined) {
+    nsecs = 0;
+  } // Per 4.2.1.2 Throw error if too many uuids are requested
+
+
+  if (nsecs >= 10000) {
+    throw new Error("uuid.v1(): Can't create more than 10M uuids/sec");
+  }
+
+  _lastMSecs = msecs;
+  _lastNSecs = nsecs;
+  _clockseq = clockseq; // Per 4.1.4 - Convert from unix epoch to Gregorian epoch
+
+  msecs += 12219292800000; // `time_low`
+
+  const tl = ((msecs & 0xfffffff) * 10000 + nsecs) % 0x100000000;
+  b[i++] = tl >>> 24 & 0xff;
+  b[i++] = tl >>> 16 & 0xff;
+  b[i++] = tl >>> 8 & 0xff;
+  b[i++] = tl & 0xff; // `time_mid`
+
+  const tmh = msecs / 0x100000000 * 10000 & 0xfffffff;
+  b[i++] = tmh >>> 8 & 0xff;
+  b[i++] = tmh & 0xff; // `time_high_and_version`
+
+  b[i++] = tmh >>> 24 & 0xf | 0x10; // include version
+
+  b[i++] = tmh >>> 16 & 0xff; // `clock_seq_hi_and_reserved` (Per 4.2.2 - include variant)
+
+  b[i++] = clockseq >>> 8 | 0x80; // `clock_seq_low`
+
+  b[i++] = clockseq & 0xff; // `node`
+
+  for (let n = 0; n < 6; ++n) {
+    b[i + n] = node[n];
+  }
+
+  return buf || (0, _stringify.unsafeStringify)(b);
+}
+
+var _default = v1;
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ 3345:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _v = _interopRequireDefault(__nccwpck_require__(4217));
+
+var _md = _interopRequireDefault(__nccwpck_require__(3989));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const v3 = (0, _v.default)('v3', 0x30, _md.default);
+var _default = v3;
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ 4217:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.URL = exports.DNS = void 0;
+exports["default"] = v35;
+
+var _stringify = __nccwpck_require__(9055);
+
+var _parse = _interopRequireDefault(__nccwpck_require__(1085));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function stringToBytes(str) {
+  str = unescape(encodeURIComponent(str)); // UTF8 escape
+
+  const bytes = [];
+
+  for (let i = 0; i < str.length; ++i) {
+    bytes.push(str.charCodeAt(i));
+  }
+
+  return bytes;
+}
+
+const DNS = '6ba7b810-9dad-11d1-80b4-00c04fd430c8';
+exports.DNS = DNS;
+const URL = '6ba7b811-9dad-11d1-80b4-00c04fd430c8';
+exports.URL = URL;
+
+function v35(name, version, hashfunc) {
+  function generateUUID(value, namespace, buf, offset) {
+    var _namespace;
+
+    if (typeof value === 'string') {
+      value = stringToBytes(value);
+    }
+
+    if (typeof namespace === 'string') {
+      namespace = (0, _parse.default)(namespace);
+    }
+
+    if (((_namespace = namespace) === null || _namespace === void 0 ? void 0 : _namespace.length) !== 16) {
+      throw TypeError('Namespace must be array-like (16 iterable integer values, 0-255)');
+    } // Compute hash of namespace and value, Per 4.3
+    // Future: Use spread syntax when supported on all platforms, e.g. `bytes =
+    // hashfunc([...namespace, ... value])`
+
+
+    let bytes = new Uint8Array(16 + value.length);
+    bytes.set(namespace);
+    bytes.set(value, namespace.length);
+    bytes = hashfunc(bytes);
+    bytes[6] = bytes[6] & 0x0f | version;
+    bytes[8] = bytes[8] & 0x3f | 0x80;
+
+    if (buf) {
+      offset = offset || 0;
+
+      for (let i = 0; i < 16; ++i) {
+        buf[offset + i] = bytes[i];
+      }
+
+      return buf;
+    }
+
+    return (0, _stringify.unsafeStringify)(bytes);
+  } // Function#name is not settable on some platforms (#270)
+
+
+  try {
+    generateUUID.name = name; // eslint-disable-next-line no-empty
+  } catch (err) {} // For CommonJS default export support
+
+
+  generateUUID.DNS = DNS;
+  generateUUID.URL = URL;
+  return generateUUID;
+}
+
+/***/ }),
+
+/***/ 8659:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _native = _interopRequireDefault(__nccwpck_require__(6733));
+
+var _rng = _interopRequireDefault(__nccwpck_require__(5636));
+
+var _stringify = __nccwpck_require__(9055);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function v4(options, buf, offset) {
+  if (_native.default.randomUUID && !buf && !options) {
+    return _native.default.randomUUID();
+  }
+
+  options = options || {};
+
+  const rnds = options.random || (options.rng || _rng.default)(); // Per 4.4, set bits for version and `clock_seq_hi_and_reserved`
+
+
+  rnds[6] = rnds[6] & 0x0f | 0x40;
+  rnds[8] = rnds[8] & 0x3f | 0x80; // Copy bytes to buffer, if provided
+
+  if (buf) {
+    offset = offset || 0;
+
+    for (let i = 0; i < 16; ++i) {
+      buf[offset + i] = rnds[i];
+    }
+
+    return buf;
+  }
+
+  return (0, _stringify.unsafeStringify)(rnds);
+}
+
+var _default = v4;
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ 9898:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _v = _interopRequireDefault(__nccwpck_require__(4217));
+
+var _sha = _interopRequireDefault(__nccwpck_require__(6936));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const v5 = (0, _v.default)('v5', 0x50, _sha.default);
+var _default = v5;
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ 4343:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _regex = _interopRequireDefault(__nccwpck_require__(4677));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function validate(uuid) {
+  return typeof uuid === 'string' && _regex.default.test(uuid);
+}
+
+var _default = validate;
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ 2841:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _validate = _interopRequireDefault(__nccwpck_require__(4343));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function version(uuid) {
+  if (!(0, _validate.default)(uuid)) {
+    throw TypeError('Invalid UUID');
+  }
+
+  return parseInt(uuid.slice(14, 15), 16);
+}
+
+var _default = version;
+exports["default"] = _default;
+
+/***/ }),
+
 /***/ 334:
 /***/ ((module) => {
 
@@ -31983,14 +32664,6 @@ function wrappy (fn, cb) {
 
 /***/ }),
 
-/***/ 1649:
-/***/ ((module) => {
-
-module.exports = eval("require")("giphy-api");
-
-
-/***/ }),
-
 /***/ 9491:
 /***/ ((module) => {
 
@@ -33846,6 +34519,821 @@ function parseParams (str) {
 module.exports = parseParams
 
 
+/***/ }),
+
+/***/ 785:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+"use strict";
+
+var __defProp = Object.defineProperty;
+var __defProps = Object.defineProperties;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropDescs = Object.getOwnPropertyDescriptors;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getOwnPropSymbols = Object.getOwnPropertySymbols;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __propIsEnum = Object.prototype.propertyIsEnumerable;
+var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __spreadValues = (a, b) => {
+  for (var prop in b || (b = {}))
+    if (__hasOwnProp.call(b, prop))
+      __defNormalProp(a, prop, b[prop]);
+  if (__getOwnPropSymbols)
+    for (var prop of __getOwnPropSymbols(b)) {
+      if (__propIsEnum.call(b, prop))
+        __defNormalProp(a, prop, b[prop]);
+    }
+  return a;
+};
+var __spreadProps = (a, b) => __defProps(a, __getOwnPropDescs(b));
+var __commonJS = (cb, mod) => function __require() {
+  return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+};
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var __async = (__this, __arguments, generator) => {
+  return new Promise((resolve, reject) => {
+    var fulfilled = (value) => {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var rejected = (value) => {
+      try {
+        step(generator.throw(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+    step((generator = generator.apply(__this, __arguments)).next());
+  });
+};
+
+// package.json
+var require_package = __commonJS({
+  "package.json"(exports, module2) {
+    module2.exports = {
+      scripts: {
+        lint: "run -T eslint . --ext .ts,.tsx",
+        clean: "rm -rf ./dist",
+        dev: "parcel public/test.html",
+        docs: "typedoc src/index.ts",
+        build: "run -T tsup src/index.ts --format cjs,esm --dts && run -T publint",
+        prepublish: "npm run clean && npm run build",
+        test: "run -T jest --config ./jestconfig.js",
+        "test:watch": "run -T jest --config ./jestconfig.js --watchAll"
+      },
+      name: "@giphy/js-fetch-api",
+      version: "5.6.0",
+      description: "Javascript API to fetch gifs and stickers from the GIPHY API.",
+      homepage: "https://github.com/Giphy/giphy-js/tree/master/packages/fetch-api",
+      main: "dist/index.cjs",
+      types: "dist/index.d.ts",
+      module: "dist/index.js",
+      type: "module",
+      sideEffects: false,
+      exports: {
+        ".": {
+          types: "./dist/index.d.ts",
+          import: "./dist/index.js",
+          require: "./dist/index.cjs"
+        },
+        "./package.json": "./package.json"
+      },
+      files: [
+        "dist/",
+        "src/**/*"
+      ],
+      license: "MIT",
+      publishConfig: {
+        access: "public"
+      },
+      dependencies: {
+        "@giphy/js-types": "*",
+        "@giphy/js-util": "*"
+      },
+      devDependencies: {
+        "jest-fetch-mock": "^3.0.3",
+        "parcel-bundler": "latest",
+        typedoc: "^0.20.37",
+        "typedoc-thunder-theme": "^0.0.3",
+        typescript: "^5.0.4"
+      }
+    };
+  }
+});
+
+// src/index.ts
+var src_exports = {};
+__export(src_exports, {
+  FetchError: () => fetch_error_default,
+  GeoFetchError: () => GeoFetchError,
+  GiphyFetch: () => api_default,
+  gifPaginator: () => gifPaginator,
+  request: () => request_default,
+  serverUrl: () => serverUrl,
+  setServerUrl: () => setServerUrl
+});
+module.exports = __toCommonJS(src_exports);
+var import_js_util2 = __nccwpck_require__(6563);
+
+// src/api.ts
+var import_js_util = __nccwpck_require__(6563);
+
+// src/normalize/gif.ts
+var BOOL_PROPS = [
+  "is_anonymous",
+  "is_community",
+  "is_featured",
+  "is_hidden",
+  "is_indexable",
+  "is_preserve_size",
+  "is_realtime",
+  "is_removed",
+  "is_sticker",
+  "is_dynamic"
+  // not finalized, and not adding to Gif type until type RFC is finished
+];
+var USER_BOOL_PROPS = ["suppress_chrome", "is_public", "is_verified"];
+var makeBool = (obj) => (prop) => obj[prop] = !!obj[prop];
+var getTag = (tag) => typeof tag === "string" ? tag : tag.text;
+var normalize = (gif, responseId = "") => {
+  const newGif = __spreadValues({}, gif);
+  newGif.id = String(newGif.id);
+  newGif.tags = (newGif.tags || []).map(getTag);
+  if (!newGif.bottle_data) {
+    newGif.bottle_data = {};
+  }
+  newGif.response_id = responseId;
+  BOOL_PROPS.forEach(makeBool(newGif));
+  Object.keys(newGif.images || {}).forEach((name) => {
+    const img = newGif.images[name];
+    img.width = parseInt(img.width);
+    img.height = parseInt(img.height);
+  });
+  const { user } = newGif;
+  if (user) {
+    const newUser = __spreadValues({}, user);
+    USER_BOOL_PROPS.forEach(makeBool(newUser));
+    newGif.user = newUser;
+  }
+  return newGif;
+};
+var normalizeGif = (result) => {
+  const { response_id } = result.meta;
+  result.data = normalize(result.data, response_id);
+  return result;
+};
+var normalizeGifs = (result) => {
+  const { response_id } = result.meta;
+  result.data = result.data.map((gif) => normalize(gif, response_id));
+  return result;
+};
+
+// src/constants.ts
+var gl = (typeof window !== "undefined" ? window : global) || {};
+var serverUrl = gl.GIPHY_API_URL || "https://api.giphy.com/v1/";
+var setServerUrl = (url) => {
+  serverUrl = url;
+};
+
+// src/fetch-error.ts
+var FetchError = class extends Error {
+  constructor(message, url, status = 0, statusText = "") {
+    super(message);
+    this.url = url;
+    this.status = status;
+    this.statusText = statusText;
+  }
+};
+var GeoFetchError = class extends FetchError {
+};
+var fetch_error_default = FetchError;
+
+// src/request.ts
+var ERROR_PREFIX = `@giphy/js-fetch-api: `;
+var DEFAULT_ERROR = "Error fetching";
+var identity = (i) => i;
+var requestMap = {};
+var maxLife = 6e4;
+var errorMaxLife = 6e3;
+var purgeCache = () => {
+  const now = Date.now();
+  Object.keys(requestMap).forEach((key) => {
+    const ttl = requestMap[key].isError ? errorMaxLife : maxLife;
+    if (now - requestMap[key].ts >= ttl) {
+      delete requestMap[key];
+    }
+  });
+};
+function request(url, options = {}) {
+  const { apiVersion = 1, noCache = false, normalizer = identity } = options;
+  const serverUrl_ = serverUrl.replace(/\/v\d+\/$/, `/v${apiVersion}/`);
+  purgeCache();
+  if (!requestMap[url] || noCache) {
+    const fullUrl = `${serverUrl_}${url}`;
+    const makeRequest = () => __async(this, null, function* () {
+      var _a2, _b;
+      let fetchError;
+      try {
+        const response = yield fetch(fullUrl, {
+          method: "get"
+        });
+        if (response.ok) {
+          const result = yield response.json();
+          if (!((_a2 = result.meta) == null ? void 0 : _a2.response_id)) {
+            throw { message: `synthetic response` };
+          } else {
+            return normalizer(result);
+          }
+        } else {
+          let message = DEFAULT_ERROR;
+          try {
+            const result = yield response.json();
+            if (result.message)
+              message = result.message;
+            if ((_b = result.meta) == null ? void 0 : _b.msg)
+              message = result.meta.msg;
+          } catch (_) {
+          }
+          if (requestMap[url]) {
+            requestMap[url].isError = true;
+          }
+          let Cls = fetch_error_default;
+          if (message === "This content is not available in your location") {
+            Cls = GeoFetchError;
+          }
+          fetchError = new Cls(`${ERROR_PREFIX}${message}`, fullUrl, response.status, response.statusText);
+        }
+      } catch (unexpectedError) {
+        fetchError = new fetch_error_default(unexpectedError.message, fullUrl);
+        if (requestMap[url]) {
+          requestMap[url].isError = true;
+        }
+      }
+      throw fetchError;
+    });
+    requestMap[url] = { request: makeRequest(), ts: Date.now() };
+  }
+  return requestMap[url].request;
+}
+var request_default = request;
+
+// src/api.ts
+var getType = (options) => options && options.type ? options.type : "gifs";
+var GiphyFetch = class {
+  constructor(apiKey, qsParams = {}) {
+    /**
+     * @hidden
+     */
+    this.getQS = (options = {}) => {
+      const searchParams = new URLSearchParams(__spreadValues(__spreadProps(__spreadValues({}, options), {
+        api_key: this.apiKey,
+        pingback_id: (0, import_js_util.getPingbackId)()
+      }), this.qsParams));
+      return searchParams.toString();
+    };
+    this.apiKey = apiKey;
+    this.qsParams = qsParams;
+  }
+  /**
+   * A list of categories
+   *
+   * @param {CategoriesOptions} [options]
+   * @returns {Promise<CategoriesResult>}
+   */
+  categories(options) {
+    return request_default(`gifs/categories?${this.getQS(options)}`);
+  }
+  /**
+   * Get a single gif by a id
+   * @param {string} id
+   * @returns {Promise<GifsResult>}
+   **/
+  gif(id, options) {
+    const prefix = (options == null ? void 0 : options.internal) ? "internal/" : "";
+    return request_default(`${prefix}gifs/${id}?${this.getQS()}`, { normalizer: normalizeGif });
+  }
+  gifs(arg1, arg2) {
+    if (Array.isArray(arg1)) {
+      return request_default(`gifs?${this.getQS({ ids: arg1.join(",") })}`, {
+        normalizer: normalizeGifs
+      });
+    }
+    return request_default(`gifs/categories/${arg1}/${arg2}?${this.getQS()}`, {
+      normalizer: normalizeGifs
+    });
+  }
+  emoji(options) {
+    return request_default(`emoji?${this.getQS(options)}`, { normalizer: normalizeGifs });
+  }
+  /**
+   * Returns a list of all the default emoji variations
+   *
+   * @param {PaginationOptions} options
+   * @returns {Promise<GifsResult>}
+   **/
+  emojiDefaultVariations(options) {
+    return request_default(`emoji?${this.getQS(options)}`, {
+      apiVersion: 2,
+      normalizer: normalizeGifs
+    });
+  }
+  /**
+   * Returns a list of gifs representing all the variations for the emoji
+   *
+   * @param {string} id
+   * @returns {Promise<NonPaginatedGifsResult>}
+   **/
+  emojiVariations(id) {
+    return request_default(`emoji/${id}/variations?${this.getQS()}`, {
+      apiVersion: 2,
+      normalizer: normalizeGifs
+    });
+  }
+  animate(text, options = {}) {
+    const qsParams = this.getQS(__spreadProps(__spreadValues({}, options), { m: text }));
+    return request_default(`text/animate?${qsParams}`, { normalizer: normalizeGifs });
+  }
+  /**
+   * @param term: string The term you're searching for
+   * @param options: SearchOptions
+   * @returns {Promise<GifsResult>}
+   **/
+  search(term, options = {}) {
+    const q = options.channel ? `@${options.channel} ${term}` : term;
+    let excludeDynamicResults;
+    if (options.type === "text") {
+      excludeDynamicResults = true;
+    }
+    const qsParams = this.getQS(__spreadProps(__spreadValues({ rating: "pg-13" }, options), { q, excludeDynamicResults }));
+    return request_default(`${getType(options)}/search?${qsParams}`, { normalizer: normalizeGifs });
+  }
+  /**
+   * Get a list of subcategories
+   * @param {string} category
+   * @param {SubcategoriesOptions} options
+   * @returns {Promise<CategoriesResult>}
+   */
+  subcategories(category, options) {
+    return request_default(`gifs/categories/${category}?${this.getQS(options)}`);
+  }
+  /**
+   * Get trending gifs
+   *
+   * @param {TrendingOptions} options
+   * @returns {Promise<GifsResult>}
+   */
+  trending(options = {}) {
+    return request_default(`${getType(options)}/trending?${this.getQS(__spreadValues({ rating: "pg-13" }, options))}`, {
+      normalizer: normalizeGifs
+    });
+  }
+  /**
+   * Get a random gif
+   * @param {RandomOptions} options
+   * @returns {Promise<GifResult>}
+   **/
+  random(options) {
+    return request_default(`${getType(options)}/random?${this.getQS(__spreadValues({ rating: "pg-13" }, options))}`, {
+      noCache: true,
+      normalizer: normalizeGif
+    });
+  }
+  /**
+   * Get related gifs by a id
+   * @param {string} id
+   * @param {SubcategoriesOptions} options
+   * @returns {Promise<GifsResult>}
+   **/
+  related(id, options = {}) {
+    const { type = "gifs" } = options;
+    return request_default(
+      `${type}/related?${this.getQS(__spreadValues({
+        gif_id: id,
+        rating: "pg-13"
+      }, options))}`,
+      { normalizer: normalizeGifs }
+    );
+  }
+  /**
+   * Search for channels based on a term
+   * @param {string} term
+   * @param options: SearchOptions
+   * @returns {Promise<ChannelsResult>}
+   **/
+  channels(term, options = {}) {
+    return request_default(
+      `channels/search?${this.getQS(__spreadValues({ q: term, rating: "pg-13" }, options))}`
+    );
+  }
+};
+var api_default = GiphyFetch;
+
+// src/paginator.ts
+var gifPaginator = (fetchGifs, initialGifs = []) => {
+  const gifs = [...initialGifs];
+  const gifIds = initialGifs.map((g) => g.id);
+  let offset = initialGifs.length;
+  let isDoneFetching = false;
+  return () => __async(void 0, null, function* () {
+    if (isDoneFetching) {
+      return gifs;
+    }
+    const result = yield fetchGifs(offset);
+    const { pagination, data: newGifs } = result;
+    offset = pagination.count + pagination.offset;
+    isDoneFetching = offset === pagination.total_count;
+    newGifs.forEach((gif) => {
+      const { id } = gif;
+      if (!gifIds.includes(id)) {
+        gifs.push(gif);
+        gifIds.push(id);
+      }
+    });
+    return [...gifs];
+  });
+};
+
+// src/index.ts
+var _a;
+if (true) {
+  const { version } = require_package();
+  if (!((_a = (0, import_js_util2.getGiphySDKRequestHeaders)()) == null ? void 0 : _a.get(`X-GIPHY-SDK-NAME`))) {
+    (0, import_js_util2.appendGiphySDKRequestHeader)(`X-GIPHY-SDK-NAME`, "FetchAPI");
+    (0, import_js_util2.appendGiphySDKRequestHeader)(`X-GIPHY-SDK-VERSION`, version);
+  }
+}
+// Annotate the CommonJS export names for ESM import in node:
+0 && (0);
+
+
+/***/ }),
+
+/***/ 6563:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+"use strict";
+
+var __defProp = Object.defineProperty;
+var __defProps = Object.defineProperties;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropDescs = Object.getOwnPropertyDescriptors;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getOwnPropSymbols = Object.getOwnPropertySymbols;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __propIsEnum = Object.prototype.propertyIsEnumerable;
+var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __spreadValues = (a, b) => {
+  for (var prop in b || (b = {}))
+    if (__hasOwnProp.call(b, prop))
+      __defNormalProp(a, prop, b[prop]);
+  if (__getOwnPropSymbols)
+    for (var prop of __getOwnPropSymbols(b)) {
+      if (__propIsEnum.call(b, prop))
+        __defNormalProp(a, prop, b[prop]);
+    }
+  return a;
+};
+var __spreadProps = (a, b) => __defProps(a, __getOwnPropDescs(b));
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+
+// src/index.ts
+var src_exports = {};
+__export(src_exports, {
+  LogLevel: () => LogLevel,
+  Logger: () => Logger,
+  appendGiphySDKRequestHeader: () => appendGiphySDKRequestHeader,
+  appendGiphySDKRequestParam: () => appendGiphySDKRequestParam,
+  bestfit: () => bestfit_default,
+  checkIfWebP: () => checkIfWebP,
+  forEach: () => forEach,
+  getAltText: () => getAltText,
+  getBestRendition: () => getBestRendition,
+  getBestRenditionUrl: () => getBestRenditionUrl,
+  getBestVideo: () => getBestVideo,
+  getClientRect: () => get_client_rect_from_el_default,
+  getGifHeight: () => getGifHeight,
+  getGifWidth: () => getGifWidth,
+  getGiphySDKRequestHeaders: () => getGiphySDKRequestHeaders,
+  getPingbackId: () => get_pingback_id_default,
+  getSpecificRendition: () => getSpecificRendition,
+  mapValues: () => mapValues,
+  noUUIDRandom: () => noUUIDRandom,
+  pick: () => pick,
+  setRenditionScaleUpMaxPixels: () => setRenditionScaleUpMaxPixels,
+  take: () => take,
+  without: () => without
+});
+module.exports = __toCommonJS(src_exports);
+
+// src/log.ts
+var LogLevel = /* @__PURE__ */ ((LogLevel2) => {
+  LogLevel2[LogLevel2["DEBUG"] = 0] = "DEBUG";
+  LogLevel2[LogLevel2["INFO"] = 1] = "INFO";
+  LogLevel2[LogLevel2["WARN"] = 2] = "WARN";
+  LogLevel2[LogLevel2["ERROR"] = 3] = "ERROR";
+  return LogLevel2;
+})(LogLevel || {});
+var Logger = {
+  ENABLED: typeof window !== "undefined" && typeof location !== "undefined" && location.search.indexOf("giphy-debug") !== -1,
+  LEVEL: 0,
+  PREFIX: "GiphyJS",
+  debug: (...msg) => {
+    if (Logger.ENABLED && Logger.LEVEL <= 0 /* DEBUG */) {
+      console.debug(Logger.PREFIX, ...msg);
+    }
+  },
+  info: (...msg) => {
+    if (Logger.ENABLED && Logger.LEVEL <= 1 /* INFO */) {
+      console.info(Logger.PREFIX, ...msg);
+    }
+  },
+  warn: (...msg) => {
+    if (Logger.ENABLED && Logger.LEVEL <= 2 /* WARN */) {
+      console.warn(Logger.PREFIX, ...msg);
+    }
+  },
+  error: (...msg) => {
+    if (Logger.ENABLED && Logger.LEVEL <= 3 /* ERROR */) {
+      console.error(Logger.PREFIX, ...msg);
+    }
+  }
+};
+
+// src/bestfit.ts
+var closestArea = (width, height, renditions) => {
+  let currentBest = Infinity;
+  let result;
+  renditions.forEach((rendition) => {
+    const widthPercentage = rendition.width / width;
+    const heightPercentage = rendition.height / height;
+    const areaPercentage = widthPercentage * heightPercentage;
+    const testBest = Math.abs(1 - areaPercentage);
+    if (testBest < currentBest) {
+      currentBest = testBest;
+      result = rendition;
+    }
+  });
+  return result;
+};
+var SCALE_UP_MAX_PIXELS = 50;
+var setRenditionScaleUpMaxPixels = (pixels) => {
+  Logger.debug(`@giphy/js-util set rendition selection scale up max pixels to ${pixels}`);
+  SCALE_UP_MAX_PIXELS = pixels;
+};
+function bestfit(renditions, width, height, scaleUpMaxPixels = SCALE_UP_MAX_PIXELS) {
+  let [largestRendition] = renditions;
+  const testRenditions = renditions.filter((rendition) => {
+    if (rendition.width * rendition.height > largestRendition.width * largestRendition.height) {
+      largestRendition = rendition;
+    }
+    return width - rendition.width <= scaleUpMaxPixels && height - rendition.height <= scaleUpMaxPixels;
+  });
+  if (testRenditions.length === 0) {
+    return largestRendition;
+  }
+  return closestArea(width, height, testRenditions);
+}
+var bestfit_default = bestfit;
+
+// src/collections.ts
+function mapValues(object, mapFn) {
+  if (Array.isArray(object)) {
+    throw `This map is just for objects, just use array.map for arrays`;
+  }
+  return Object.keys(object).reduce((result, key) => {
+    result[key] = mapFn(object[key], key);
+    return result;
+  }, {});
+}
+function forEach(object, mapFn) {
+  if (Array.isArray(object)) {
+    throw `This map is just for objects, just use array.forEach for arrays`;
+  }
+  return Object.keys(object).forEach((key) => {
+    mapFn(object[key], key);
+  });
+}
+function take(arr, count = 0) {
+  return arr.slice(0, count);
+}
+function without(arr, values) {
+  return arr.filter((val) => values.indexOf(val) === -1);
+}
+function pick(object, pick2) {
+  const res = {};
+  pick2.forEach((key) => {
+    if (object[key] !== void 0) {
+      res[key] = object[key];
+    }
+  });
+  return res;
+}
+
+// src/get-client-rect-from-el.ts
+var getClientRect = (el) => {
+  let left = 0;
+  let top = 0;
+  const width = el.offsetWidth;
+  const height = el.offsetHeight;
+  do {
+    left += el.offsetLeft;
+    top += el.offsetTop;
+    el = el.offsetParent;
+  } while (el);
+  const result = {
+    left,
+    top,
+    width,
+    height,
+    right: left + width,
+    bottom: top + height,
+    x: left,
+    y: top
+  };
+  return __spreadProps(__spreadValues({}, result), { toJSON: () => JSON.stringify(result) });
+};
+var get_client_rect_from_el_default = getClientRect;
+
+// src/get-pingback-id.ts
+var import_uuid = __nccwpck_require__(7193);
+var pingbackId = "";
+var idLength = 16;
+var noUUIDRandom = () => {
+  let result = "";
+  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const charactersLength = characters.length;
+  for (let i = 0; i < idLength; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+};
+var getPingbackId = () => {
+  if (!pingbackId) {
+    try {
+      pingbackId = sessionStorage.getItem("giphyPingbackId");
+    } catch (_) {
+    }
+    if (!pingbackId) {
+      const hexTime = (/* @__PURE__ */ new Date()).getTime().toString(16);
+      try {
+        pingbackId = `${hexTime}${(0, import_uuid.v4)().replace(/-/g, "")}`.substring(0, idLength);
+      } catch (error) {
+        pingbackId = noUUIDRandom();
+      }
+      try {
+        sessionStorage.setItem("giphyPingbackId", pingbackId);
+      } catch (_) {
+      }
+    }
+  }
+  return pingbackId;
+};
+var get_pingback_id_default = getPingbackId;
+
+// src/webp-check.ts
+var SUPPORTS_WEBP = null;
+var checkIfWebP = new Promise((resolve) => {
+  if (typeof Image === "undefined") {
+    resolve(false);
+  }
+  const webp = new Image();
+  webp.onload = () => {
+    SUPPORTS_WEBP = true;
+    resolve(SUPPORTS_WEBP);
+  };
+  webp.onerror = () => {
+    SUPPORTS_WEBP = false;
+    resolve(SUPPORTS_WEBP);
+  };
+  webp.src = "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACyAgCdASoCAAIALmk0mk0iIiIiIgBoSygABc6WWgAA/veff/0PP8bA//LwYAAA";
+});
+
+// src/gif-utils.ts
+var getSpecificRendition = ({ images, is_sticker: isSticker }, renditionLabel, isStill = false, useVideo = false) => {
+  if (!images || !renditionLabel)
+    return "";
+  isStill = isStill && !useVideo;
+  const rendition = images[`${renditionLabel}${isStill ? "_still" : ""}`];
+  if (rendition) {
+    if (isSticker || isStill) {
+      return rendition.url;
+    }
+    const webP = SUPPORTS_WEBP && rendition.webp;
+    return useVideo ? rendition.mp4 : webP || rendition.url;
+  }
+  return "";
+};
+var getBestVideo = (video, width, height) => {
+  let assets = video == null ? void 0 : video.assets;
+  if (assets) {
+    assets = __spreadValues({}, assets);
+    delete assets.source;
+    const filteredAssets = Object.values(assets).sort((a, b) => a.width - b.width);
+    return bestfit_default(filteredAssets, width, height);
+  }
+};
+var getRenditions = (type, images, video) => type === "video" && video && video.previews && !Object.keys(images).length ? video.previews : images;
+var getBestRendition = (images, gifWidth, gifHeight, scaleUpMaxPixels) => {
+  const checkRenditions = pick(images, [
+    "original",
+    "fixed_width",
+    "fixed_height",
+    "fixed_width_small",
+    "fixed_height_small"
+  ]);
+  const testImages = Object.entries(checkRenditions).map(([renditionName, val]) => __spreadValues({
+    renditionName
+  }, val));
+  return bestfit_default(testImages, gifWidth, gifHeight, scaleUpMaxPixels);
+};
+var getBestRenditionUrl = ({ images, video, type }, gifWidth, gifHeight, options = { isStill: false, useVideo: false }) => {
+  if (!gifWidth || !gifHeight || !images)
+    return "";
+  const { useVideo, isStill, scaleUpMaxPixels } = options;
+  const renditions = getRenditions(type, images, video);
+  const { renditionName } = getBestRendition(renditions, gifWidth, gifHeight, scaleUpMaxPixels);
+  const key = `${renditionName}${isStill && !useVideo ? "_still" : ""}`;
+  const rendition = renditions[key];
+  const match = useVideo ? rendition.mp4 : SUPPORTS_WEBP && rendition.webp ? rendition.webp : rendition.url;
+  return match || "";
+};
+var getGifHeight = ({ images }, gifWidth) => {
+  const { fixed_width } = images;
+  if (fixed_width) {
+    const { width, height } = fixed_width;
+    const aspectRatio = width / height;
+    return Math.round(gifWidth / aspectRatio);
+  }
+  return 0;
+};
+var getGifWidth = ({ images }, gifHeight) => {
+  const { fixed_width } = images;
+  if (fixed_width) {
+    const { width, height } = fixed_width;
+    const aspectRatio = width / height;
+    return Math.round(gifHeight * aspectRatio);
+  }
+  return 0;
+};
+var getAltText = ({ alt_text, user, tags = [], is_sticker = false, title = "" }) => {
+  if (alt_text) {
+    return alt_text;
+  }
+  if (title) {
+    return title;
+  }
+  const username = user && user.username || "";
+  const filteredTags = take(without(tags, ["transparent"]), username ? 4 : 5);
+  return `${username ? `${username} ` : ``}${filteredTags.join(" ")} ${is_sticker ? "Sticker" : "GIF"}`;
+};
+
+// src/sdk-headers.ts
+var gl = (typeof window !== "undefined" ? window : global) || {};
+gl._GIPHY_SDK_HEADERS_ = gl._GIPHY_SDK_HEADERS_ || (gl.Headers ? new gl.Headers({
+  "X-GIPHY-SDK-PLATFORM": "web"
+}) : void 0);
+var getGiphySDKRequestHeaders = () => gl._GIPHY_SDK_HEADERS_;
+var appendGiphySDKRequestHeader = (key, value) => {
+  var _a;
+  return (_a = getGiphySDKRequestHeaders()) == null ? void 0 : _a.set(key, value);
+};
+var appendGiphySDKRequestParam = (key, value) => {
+  var _a;
+  return (_a = getGiphySDKRequestHeaders()) == null ? void 0 : _a.set(key, value);
+};
+// Annotate the CommonJS export names for ESM import in node:
+0 && (0);
+
+
 /***/ })
 
 /******/ 	});
@@ -33890,7 +35378,7 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
 const { Octokit } = __nccwpck_require__(5375);
-const Giphy = __nccwpck_require__(1649);
+const { GiphyFetch } = __nccwpck_require__(785);
 const core = __nccwpck_require__(2186);
 const github = __nccwpck_require__(5438);
 
